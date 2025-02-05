@@ -3,31 +3,43 @@ import { useState } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
 import { ChatInput } from "@/components/ChatInput";
 import { motion } from "framer-motion";
+import { sendMessageToGemini, Message } from "@/utils/geminiClient";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
-      text: "Hello! I'm LinguaGuide, your language learning assistant. How can I help you today?",
+      text: "Hello! I'm LinguaGuide, your adaptive language learning assistant. To get started, could you tell me which language you'd like to learn and what your goals are (e.g., travel, work, or personal interest)?",
       isBot: true,
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleSendMessage = async (message: string) => {
-    setMessages((prev) => [...prev, { text: message, isBot: false }]);
-    setIsLoading(true);
+    try {
+      setMessages((prev) => [...prev, { text: message, isBot: false }]);
+      setIsLoading(true);
 
-    // Simulate bot response (replace with actual API call later)
-    setTimeout(() => {
+      const response = await sendMessageToGemini(message, messages);
+      
       setMessages((prev) => [
         ...prev,
         {
-          text: "I understand you're interested in language learning. Could you tell me which language you'd like to focus on?",
+          text: response,
           isBot: true,
         },
       ]);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to get a response. Please try again.",
+      });
+      console.error("Chat error:", error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
