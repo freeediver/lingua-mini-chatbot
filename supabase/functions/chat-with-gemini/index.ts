@@ -33,6 +33,12 @@ serve(async (req) => {
   try {
     const { message, history } = await req.json();
 
+    // Validate API key
+    if (!GEMINI_API_KEY) {
+      console.error('Missing GEMINI_API_KEY environment variable');
+      throw new Error('API key not configured');
+    }
+
     // Prepare conversation history for Gemini
     const messages = [
       {
@@ -49,6 +55,8 @@ serve(async (req) => {
       },
     ];
 
+    console.log("Sending request to Gemini API with messages:", JSON.stringify(messages));
+
     // Call Gemini API
     const response = await fetch("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent", {
       method: "POST",
@@ -62,14 +70,25 @@ serve(async (req) => {
       }),
     });
 
-    const data = await response.json();
-    let generatedText = "";
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Gemini API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
+      throw new Error(`Gemini API returned status ${response.status}: ${errorText}`);
+    }
 
-    if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-      generatedText = data.candidates[0].content.parts[0].text;
-    } else {
+    const data = await response.json();
+    console.log("Received response from Gemini API:", JSON.stringify(data));
+
+    if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
+      console.error("Invalid Gemini API response format:", JSON.stringify(data));
       throw new Error("Invalid response format from Gemini API");
     }
+
+    const generatedText = data.candidates[0].content.parts[0].text;
 
     return new Response(
       JSON.stringify({
@@ -80,14 +99,10 @@ serve(async (req) => {
       },
     );
   } catch (error) {
-    console.error("Error:", error);
-    let errorMessage = "An unexpected error occurred";
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
+    console.error("Error in chat-with-gemini function:", error);
     return new Response(
       JSON.stringify({
-        error: errorMessage,
+        error: error.message || "An unexpected error occurred",
       }),
       {
         status: 500,
