@@ -1,5 +1,5 @@
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "../integrations/supabase/client.ts";
 
 export type Message = {
   text: string;
