@@ -9,11 +9,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "compilerOptions": {
-      "lib": ["dom", "esnext"],
-      "strict": true,
-      "jsx": "react-jsx"
-    },
+    "lib": ["dom", "esnext"],
+    "strict": true,
+    "jsx": "react-jsx",
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
