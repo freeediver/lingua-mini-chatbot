@@ -6,13 +6,18 @@ export type Message = {
   isBot: boolean;
 };
 
+// Create Supabase client with explicit URL and key checks
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 export const sendMessageToGemini = async (message: string, history: Message[]) => {
   try {
-    const supabase = createClient(
-      import.meta.env.VITE_SUPABASE_URL,
-      import.meta.env.VITE_SUPABASE_ANON_KEY
-    );
-
     const { data, error } = await supabase.functions.invoke('chat-with-gemini', {
       body: {
         message,
