@@ -33,6 +33,12 @@ serve(async (req) => {
   try {
     const { message, history } = await req.json();
 
+    // Validate API key
+    if (!GEMINI_API_KEY) {
+      console.error('Missing GEMINI_API_KEY environment variable');
+      throw new Error('API key not configured');
+    }
+
     // Prepare conversation history for Gemini
     const messages = [
       {
@@ -66,7 +72,11 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Gemini API error response:", errorText);
+      console.error("Gemini API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
       throw new Error(`Gemini API returned status ${response.status}: ${errorText}`);
     }
 
@@ -75,7 +85,7 @@ serve(async (req) => {
 
     if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
       console.error("Invalid Gemini API response format:", JSON.stringify(data));
-      throw new Error("Invalid response format from Gemini API. Full response: " + JSON.stringify(data));
+      throw new Error("Invalid response format from Gemini API");
     }
 
     const generatedText = data.candidates[0].content.parts[0].text;
@@ -89,7 +99,7 @@ serve(async (req) => {
       },
     );
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in chat-with-gemini function:", error);
     return new Response(
       JSON.stringify({
         error: error.message || "An unexpected error occurred",
