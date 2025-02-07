@@ -1,6 +1,7 @@
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React from "https://esm.sh/react";
+import { Button } from "../components/ui/button.tsx";
+import { Input } from "../components/ui/input.tsx";
 import { SendHorizonal } from "lucide-react";
 import { useState } from "react";
 
@@ -24,7 +25,7 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
     <form onSubmit={handleSubmit} className="flex gap-2 p-4">
       <Input
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
         placeholder="Type your message..."
         className="flex-1"
         disabled={disabled}

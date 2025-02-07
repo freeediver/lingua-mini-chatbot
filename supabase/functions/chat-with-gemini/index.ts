@@ -80,9 +80,13 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("Error:", error);
+    let errorMessage = "An unexpected error occurred";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
     return new Response(
       JSON.stringify({
-        error: error.message,
+        error: errorMessage,
       }),
       {
         status: 500,

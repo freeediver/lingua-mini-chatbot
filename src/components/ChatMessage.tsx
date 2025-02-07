@@ -1,5 +1,5 @@
 
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils.ts";
 import { motion } from "framer-motion";
 
 interface ChatMessageProps {
