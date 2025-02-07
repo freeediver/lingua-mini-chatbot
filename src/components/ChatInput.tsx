@@ -1,5 +1,5 @@
 
-import React from "https://esm.sh/react";
+import React from 'react';
 import { Button } from "../components/ui/button.tsx";
 import { Input } from "../components/ui/input.tsx";
 import { SendHorizonal } from "lucide-react";
