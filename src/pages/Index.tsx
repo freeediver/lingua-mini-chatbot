@@ -1,10 +1,10 @@
 
 import { useState } from "react";
-import { ChatMessage } from ".././components/ChatMessage.tsx";
-import { ChatInput } from ".././components/ChatInput.tsx";
+import { ChatMessage } from "../components/ChatMessage";
+import { ChatInput } from "../components/ChatInput";
 import { motion } from "framer-motion";
-import { sendMessageToGemini, Message } from "../utils/geminiClient.ts";
-import { useToast } from ".././components/ui/use-toast.ts";
+import { sendMessageToGemini, Message } from "../utils/geminiClient";
+import { useToast } from "../components/ui/use-toast";
 import React from "react";
 
 const Index = () => {
