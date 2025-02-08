@@ -3,6 +3,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')!;
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -26,18 +27,19 @@ Core Principles
 4- Error Correction: Gently correct mistakes with examples, and encourage self-correction.`;
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, history } = await req.json();
-
     // Validate API key
     if (!GEMINI_API_KEY) {
       console.error('Missing GEMINI_API_KEY environment variable');
-      throw new Error('API key not configured');
+      throw new Error('Gemini API key not configured');
     }
+
+    const { message, history } = await req.json();
 
     // Prepare conversation history for Gemini
     const messages = [
@@ -57,12 +59,12 @@ serve(async (req) => {
 
     console.log("Sending request to Gemini API with messages:", JSON.stringify(messages));
 
-    // Call Gemini API
-    const response = await fetch("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent", {
+    // Call Gemini API with proper error handling
+    const response = await fetch(GEMINI_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${GEMINI_API_KEY}`,
+        "Authorization": `Bearer ${GEMINI_API_KEY}`,
       },
       body: JSON.stringify({
         contents: messages,
@@ -83,6 +85,7 @@ serve(async (req) => {
     const data = await response.json();
     console.log("Received response from Gemini API:", JSON.stringify(data));
 
+    // Validate response format
     if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
       console.error("Invalid Gemini API response format:", JSON.stringify(data));
       throw new Error("Invalid response format from Gemini API");
