@@ -1,5 +1,5 @@
 
-import { GEMINI_API_KEY, GEMINI_API_URL, SYSTEM_INSTRUCTION } from "../config/config";
+import { GEMINI_API_URL, SYSTEM_INSTRUCTION } from "../../src/config/config.ts";
 
 export type Message = {
   text: string;
@@ -40,7 +40,6 @@ export const sendMessageToGemini = async (message: string, history: Message[]) =
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${GEMINI_API_KEY}`,
       },
       body: JSON.stringify({
         contents: messages,
