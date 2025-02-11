@@ -39,6 +39,7 @@ This project is built with:
 🎨 Tailwind CSS – Utility-first CSS framework for responsive design.
 
 Screenshots
-![App Screenshot](assets/images/Sreenshot-1.png)
+
+![App Screenshot](assets/images/Screenshot-1.png)
 ![App Screenshot](assets/images/Screenshot-2.png)
 ![App Screenshot](assets/images/Screenshot-3.png)
