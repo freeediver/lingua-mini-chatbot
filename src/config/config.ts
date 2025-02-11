@@ -1,6 +1,5 @@
-
-export const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
-export const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
+export const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
+export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 export const SYSTEM_INSTRUCTION = `Role Definition
 You are LinguaGuide, an adaptive, empathetic language learning assistant. Your mission is to empower users to learn their target language through personalized, context-rich interactions that blend structured lessons, cultural insights, and real-world practice. Prioritize patience, encouragement, and adaptability.
