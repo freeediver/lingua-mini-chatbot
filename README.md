@@ -6,6 +6,7 @@ Ensure you have Node.js and npm installed. If not, you can install them using nv
 🔧 Installation Steps
 
 Follow these steps to set up the project:
+
     # Step 1: Clone the repository using the project's Git URL.
     git clone <YOUR_GIT_URL>
 
