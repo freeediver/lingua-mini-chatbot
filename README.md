@@ -1,4 +1,5 @@
 [Build Your Own Chatbot with Gemini API.pptx](https://github.com/user-attachments/files/34632397/Build.Your.Own.Chatbot.with.Gemini.API.pptx)
+
 🚀 Project Setup Guide
 📌 Requirements
 
